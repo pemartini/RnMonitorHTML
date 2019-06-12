@@ -210,49 +210,49 @@ $(document).ready(function() {
     minZoom: 3
   });
 
-    // A group layer for base layers
-    var baseLayers = new ol.layer.Group({
-      title: 'Maps',
-      openInLayerSwitcher: true,
-      layers: [
-        new ol.layer.Tile({
-          title: "Gray",
-          baseLayer: true,
-          source: new ol.source.BingMaps({
-            key:
-              "Aob-XwBd_DZUehKtf8gAHNe8FrVmKMgZgLHscTry5CZTB_YJc98xKdQuheugdhpz",
-            crossOrigin: "anonymous",
-            maxZoom: 19,
-            imagerySet: 'canvasGray'
-          })
-        }),
-        new ol.layer.Tile({
-          title: "Aerial",
-          baseLayer: true,
-          visible: false,
-          source: new ol.source.BingMaps({
-            key:
-              "Aob-XwBd_DZUehKtf8gAHNe8FrVmKMgZgLHscTry5CZTB_YJc98xKdQuheugdhpz",
-            crossOrigin: "anonymous",
-            maxZoom: 19,
-            imagerySet: 'Aerial'
-          })
-        }),
-        new ol.layer.Tile({
-          title: "Aerial w/Labels",
-          baseLayer: true,
-          source: new ol.source.BingMaps({
-            key:
-              "Aob-XwBd_DZUehKtf8gAHNe8FrVmKMgZgLHscTry5CZTB_YJc98xKdQuheugdhpz",
-            crossOrigin: "anonymous",
-            maxZoom: 19,
-            imagerySet: 'AerialWithLabels'
-          }),
-          visible: false
+  // A group layer for base layers
+  var baseLayers = new ol.layer.Group({
+    title: "Maps",
+    openInLayerSwitcher: true,
+    layers: [
+      new ol.layer.Tile({
+        title: "Gray",
+        baseLayer: true,
+        source: new ol.source.BingMaps({
+          key:
+            "Aob-XwBd_DZUehKtf8gAHNe8FrVmKMgZgLHscTry5CZTB_YJc98xKdQuheugdhpz",
+          crossOrigin: "anonymous",
+          maxZoom: 19,
+          imagerySet: "canvasGray"
         })
-      ]
-    });
-  
+      }),
+      new ol.layer.Tile({
+        title: "Aerial",
+        baseLayer: true,
+        visible: false,
+        source: new ol.source.BingMaps({
+          key:
+            "Aob-XwBd_DZUehKtf8gAHNe8FrVmKMgZgLHscTry5CZTB_YJc98xKdQuheugdhpz",
+          crossOrigin: "anonymous",
+          maxZoom: 19,
+          imagerySet: "Aerial"
+        })
+      }),
+      new ol.layer.Tile({
+        title: "Aerial w/Labels",
+        baseLayer: true,
+        source: new ol.source.BingMaps({
+          key:
+            "Aob-XwBd_DZUehKtf8gAHNe8FrVmKMgZgLHscTry5CZTB_YJc98xKdQuheugdhpz",
+          crossOrigin: "anonymous",
+          maxZoom: 19,
+          imagerySet: "AerialWithLabels"
+        }),
+        visible: false
+      })
+    ]
+  });
+
   var map = new ol.Map({
     target: "maps",
     controls: [
@@ -269,9 +269,8 @@ $(document).ready(function() {
   });
 
   var switcher = new ol.control.LayerSwitcher({});
-  switcher.on('drawlist', function(e) {
+  switcher.on("drawlist", function(e) {
     var layer = e.layer;
-    
   });
   var button = $('<div class="toggleVisibility" title="show/hide">')
     .text("Show/hide all")
@@ -280,15 +279,19 @@ $(document).ready(function() {
       var b = !a[0].getVisible();
       if (b) button.removeClass("show");
       else button.addClass("show");
-      for (var i=0; i<a.length; i++) {
+      for (var i = 0; i < a.length; i++) {
         a[i].setVisible(b);
       }
     });
-  switcher.setHeader($('<div>').append(button).get(0))
+  switcher.setHeader(
+    $("<div>")
+      .append(button)
+      .get(0)
+  );
 
   map.addControl(switcher);
   function displayInLayerSwitcher(b) {
-    mapbox.set('displayInLayerSwitcher', b);
+    mapbox.set("displayInLayerSwitcher", b);
   }
   var menu = new ol.control.Overlay({
     closeBox: true,
@@ -310,6 +313,7 @@ $(document).ready(function() {
   var select = new ol.interaction.Select();
   var erase = new ol.interaction.Select();
   var wkt = new ol.format.WKT();
+  source = new ol.source.Vector({ wrapX: false });
 
   var lineDraw = new ol.interaction.Draw({
     source: source,
@@ -387,7 +391,10 @@ $(document).ready(function() {
               feature.setStyle();
             }
           });
-        } else if (type == "5c9e496345e5302a1c74fd5d" || type == "5c9e496745e5302a1c74fd5e") {
+        } else if (
+          type == "5c9e496345e5302a1c74fd5d" ||
+          type == "5c9e496745e5302a1c74fd5e"
+        ) {
           feature.setStyle(styleCounty);
         } else if (type == "5cbf23f68321ca39485dcd09") {
           $("#selectPiso").change(function() {
@@ -403,17 +410,18 @@ $(document).ready(function() {
     })
   );
 
-  var pontos = "http://62.48.168.89:8080/geoserver/RnMonitor/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=RnMonitor%3Amedicoes&maxFeatures=150&CQL_FILTER=end+LIKE+'false'&outputFormat=application%2Fjson";
-  
+  var pontos =
+    "http://62.48.168.89:8080/geoserver/RnMonitor/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=RnMonitor%3Amedicoes&maxFeatures=150&CQL_FILTER=end+LIKE+'false'&outputFormat=application%2Fjson";
+
   pontosLayer = new ol.source.Vector({
     url: pontos,
     format: new ol.format.GeoJSON()
   });
 
   var layer2 = new ol.layer.Tile({
-    title : "Geological Chart",
+    title: "Geological Chart",
     source: new ol.source.TileWMS({
-      name : "Geological Chart",
+      name: "Geological Chart",
       url: "http://62.48.168.89:8080/geoserver/RnMonitor/wms?service/",
       params: {
         LAYERS: "RnMonitor:19",
@@ -424,9 +432,9 @@ $(document).ready(function() {
   });
 
   var radonRiskLayer = new ol.layer.Tile({
-    title : "Radon Risk ITN",
+    title: "Radon Risk ITN",
     source: new ol.source.TileWMS({
-      name : "Radon Risk",
+      name: "Radon Risk",
       url: "http://62.48.168.89:8080/geoserver/RnMonitor/wms?service/",
       params: {
         LAYERS: "RnMonitor:RadonMap",
@@ -436,25 +444,26 @@ $(document).ready(function() {
     })
   });
 
-map.addLayer(layer2);
-layer2.setOpacity(0.3);
-layer2.setVisible(false);
-map.addLayer(radonRiskLayer);
-radonRiskLayer.setOpacity(0.05);
-radonRiskLayer.setVisible(true);
+  map.addLayer(layer2);
+  layer2.setOpacity(0.3);
+  layer2.setVisible(false);
+  map.addLayer(radonRiskLayer);
+  radonRiskLayer.setOpacity(0.05);
+  radonRiskLayer.setVisible(true);
 
   $("#geologico").click(function() {
     layer2.setVisible(!layer2.getVisible());
   });
 
   var piso0 = new ol.layer.Tile({
-    title : 'Buildings',
+    title: "Buildings",
     displayInLayerSwitcher: false,
     source: new ol.source.TileWMS({
       url: "http://62.48.168.89:8080/geoserver/RnMonitor/wms?service/",
-      name : "Buildings",
+      name: "Buildings",
       params: {
-        LAYERS: "RnMonitor:000, RnMonitor:001, RnMonitor:002, RnMonitor:003,RnMonitor:004"
+        LAYERS:
+          "RnMonitor:000, RnMonitor:001, RnMonitor:002, RnMonitor:003,RnMonitor:004"
       },
       serverType: "geoserver"
     })
@@ -467,7 +476,7 @@ radonRiskLayer.setVisible(true);
     popupClass: "default",
     closeBox: true,
     onshow: function() {},
-    onclose: function() {},
+    onclose: function() {}
   });
 
   var selectPop = new ol.interaction.Select({});
@@ -488,7 +497,7 @@ radonRiskLayer.setVisible(true);
         image: new ol.style.Circle({
           radius: radius,
           fill: new ol.style.Fill({
-            color: "rgba("+color+")"
+            color: "rgba(" + color + ")"
           })
         })
       });
@@ -578,53 +587,77 @@ radonRiskLayer.setVisible(true);
   selectCluster.getFeatures().on(["add"], function(e) {
     if (e.element.id_ == undefined) {
       var c = e.element.get("features");
-      if(c.length >= 1){
+      if (c.length >= 1) {
         var newA = [];
-        for(var a = 0 ; a < c.length; a++){
-          newA.push("var-Sensor="+c[a].getProperties().sensor_id);
-             }   
-          $("#valueOfh6").html("<h6>UNDER DEVELOPMENT. FIXING THIS A.S.A.P.</h6>");
-          $("#dadosEdificio").html("<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=8&"+newA.join("&")+"&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>"+
-          "<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=9&"+newA.join("&")+"&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>"+
-          "<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=10&"+newA.join("&")+"&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>"+
-          '<iframe src="http://62.48.168.89:4000/d-solo/QHRvd1GWk/rnmonitor_dash_metrix?refresh=5m&orgId=1&'+newA.join("&")+'&panelId=4&theme=dark" width="100%" height="100" frameborder="0"></iframe>');
-          if ($("#menu").is(":hidden")) {
-            menu.toggle();
-          }
+        for (var a = 0; a < c.length; a++) {
+          newA.push("var-Sensor=" + c[a].getProperties().sensor_id);
         }
-      else if (c.length == 1) {
+        $("#valueOfh6").html(
+          "<h6>UNDER DEVELOPMENT. FIXING THIS A.S.A.P.</h6>"
+        );
+        $("#dadosEdificio").html(
+          "<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=8&" +
+            newA.join("&") +
+            "&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>" +
+            "<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=9&" +
+            newA.join("&") +
+            "&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>" +
+            "<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=10&" +
+            newA.join("&") +
+            "&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>" +
+            '<iframe src="http://62.48.168.89:4000/d-solo/QHRvd1GWk/rnmonitor_dash_metrix?refresh=5m&orgId=1&' +
+            newA.join("&") +
+            '&panelId=4&theme=dark" width="100%" height="100" frameborder="0"></iframe>'
+        );
+        if ($("#menu").is(":hidden")) {
+          menu.toggle();
+        }
+      } else if (c.length == 1) {
         var feature = c[0];
         var content = "";
         content += "Sensor: " + feature.getProperties().description;
         sensorData = feature.getProperties().sensor_id;
         var center = e.element.getGeometry().getExtent();
         var newCenter = ol.extent.getCenter(center);
-          flash(feature, 1000);
-          if ($("#menu").is(":hidden")) {
-            menu.toggle();
-          }
-          else{
-
-          }
-          var content = $("<div>").append("<h6>Sensor "+sensorData+ ":</h6><iframe src='http://62.48.168.89:4000/d-solo/MNYFg0GZk/general?panelId=2&orgId=1&var-Sensor="+sensorData+"&refresh=5s' width='100%' height='200' frameborder='0'></iframe><br><iframe src='http://62.48.168.89:4000/d-solo/MNYFg0GZk/general?panelId=6&var-Sensor="+sensorData+"&refresh=30m&orgId=1&theme=light' width='100%' height='200' frameborder='0'></iframe><br><iframe src='http://62.48.168.89:4000/d-solo/MNYFg0GZk/general?orgId=1&var-Sensor="+sensorData+"&refresh=30m&panelId=4&theme=light' width='100%' height='200' frameborder='0'></iframe></div></div>"+
-          "<iframe src='http://62.48.168.89:4000/d-solo/QHRvd1GWk/rnmonitor_dash_metrix?orgId=1&panelId=2&fullscreen&var-Sensor="+sensorData+"' width='50%' height='100px' frameborder='0'></iframe><iframe src='http://62.48.168.89:4000/d-solo/QHRvd1GWk/rnmonitor_dash_metrix?orgId=1&panelId=3&fullscreen&var-Sensor="+sensorData+"' width='50%' height='100px' frameborder='0'></iframe></td><br><small>Hint: Selecione e arraste no gráfico para Zoom In. Prima Ctrl + Z para Zoom Out.</small>");   
-          $("#valueOfh6").html("<h6>UNDER DEVELOPMENT</h6>");
-          $("#dadosEdificio").html(content);         
-          select.getFeatures().on(["remove"], function (e) {
-            /*if ($("#menu").is(":visible")) {
+        flash(feature, 1000);
+        if ($("#menu").is(":hidden")) {
+          menu.toggle();
+        } else {
+        }
+        var content = $("<div>").append(
+          "<h6>Sensor " +
+            sensorData +
+            ":</h6><iframe src='http://62.48.168.89:4000/d-solo/MNYFg0GZk/general?panelId=2&orgId=1&var-Sensor=" +
+            sensorData +
+            "&refresh=5s' width='100%' height='200' frameborder='0'></iframe><br><iframe src='http://62.48.168.89:4000/d-solo/MNYFg0GZk/general?panelId=6&var-Sensor=" +
+            sensorData +
+            "&refresh=30m&orgId=1&theme=light' width='100%' height='200' frameborder='0'></iframe><br><iframe src='http://62.48.168.89:4000/d-solo/MNYFg0GZk/general?orgId=1&var-Sensor=" +
+            sensorData +
+            "&refresh=30m&panelId=4&theme=light' width='100%' height='200' frameborder='0'></iframe></div></div>" +
+            "<iframe src='http://62.48.168.89:4000/d-solo/QHRvd1GWk/rnmonitor_dash_metrix?orgId=1&panelId=2&fullscreen&var-Sensor=" +
+            sensorData +
+            "' width='50%' height='100px' frameborder='0'></iframe><iframe src='http://62.48.168.89:4000/d-solo/QHRvd1GWk/rnmonitor_dash_metrix?orgId=1&panelId=3&fullscreen&var-Sensor=" +
+            sensorData +
+            "' width='50%' height='100px' frameborder='0'></iframe></td><br><small>Hint: Selecione e arraste no gráfico para Zoom In. Prima Ctrl + Z para Zoom Out.</small>"
+        );
+        $("#valueOfh6").html("<h6>UNDER DEVELOPMENT</h6>");
+        $("#dadosEdificio").html(content);
+        select.getFeatures().on(["remove"], function(e) {
+          /*if ($("#menu").is(":visible")) {
               menu.toggle();
             }*/
-          });
-        }
-        else {
-        }
+        });
+      } else {
       }
-      else{
+    } else {
       var feature = e.element;
-      if (feature.get("polygonType_id") == "5c9e495a45e5302a1c74fd5b" || feature.get("polygonType_id") == "5c9e495f45e5302a1c74fd5c") {
+      if (
+        feature.get("polygonType_id") == "5c9e495a45e5302a1c74fd5b" ||
+        feature.get("polygonType_id") == "5c9e495f45e5302a1c74fd5c"
+      ) {
         if ($("#menu").is(":hidden")) {
-             menu.toggle();
-           }
+          menu.toggle();
+        }
         var center = e.element.getGeometry().getExtent();
         var newCenter = ol.extent.getCenter(center);
         var clima = "";
@@ -637,9 +670,12 @@ radonRiskLayer.setVisible(true);
         if (feature.get("polygonType_id") == "5c9e495f45e5302a1c74fd5c") {
           getSensorInBuilding(feature.id_);
           var content = $("<div>").append(
-            "<div class='row'><div class='col-12'><div align='center' class='imagesBig'><img alter='imagem edificio' src='assets/images/"+feature.get('description')+".jpg' class='planta'></div></div></div><hr>" +
-             "<div class='row'><div class='col-md-12'><p><strong>Edifício: </strong>" +
-              feature.get("name") + "</div>" +
+            "<div class='row'><div class='col-12'><div align='center' class='imagesBig'><img alter='imagem edificio' src='assets/images/" +
+              feature.get("description") +
+              ".jpg' class='planta'></div></div></div><hr>" +
+              "<div class='row'><div class='col-md-12'><p><strong>Edifício: </strong>" +
+              feature.get("name") +
+              "</div>" +
               "</div><div class='row'><div class='col-md-6'>" +
               "</p><p><strong>Tipologia: </strong>" +
               feature.get("typology") +
@@ -672,34 +708,39 @@ radonRiskLayer.setVisible(true);
           $("#valueOfh6").html(content);
         } else {
           getSensorInRoom(feature.id_);
-        var content1 = $("<div id='testeFeature'>").append("<div class='row'><div class='col-md-12'>" +
-            "<p><strong>Edifício: </strong>" +
-            feature.get("name")+". "+ feature.get("description") +"</div>" +
-            "</div><div class='row'><div class='col-md-6'></p><p><strong>Fachada: </strong>" +
-            feature.get("orientation") +
-            "</div><div class='col-md-6'></p><p><strong>Área: </strong>" +
-            feature.get("area") +
-            " m<sup> 2</sup>" +
-            "</div></div><div class='row'><div class='col-md-6'></p><p><strong>Climatização: </strong>" +
-            clima +
-            "</div></div></div><hr>" +
-            "<div class='row'><div class='col-md-6'></p><p><strong>Paredes: </strong>" +
-            feature.get("walls") +
-            "</div><div class='col-md-6'></p><p><strong>Pilares: </strong>" +
-            feature.get("pillars") +
-            "</div></div><div class='row'><div class='col-md-6'></p><p><strong>Vigas: </strong>" +
-            feature.get("beams") +
-            "</div><div class='col-md-6'></p><p><strong>Teto: </strong>" +
-            feature.get("ceiling") +
-            "</div></div>"
-        );
-          $(".menuTitulo").html("Compartimento " + feature.get("name") + "<br>");
+          var content1 = $("<div id='testeFeature'>").append(
+            "<div class='row'><div class='col-md-12'>" +
+              "<p><strong>Edifício: </strong>" +
+              feature.get("name") +
+              ". " +
+              feature.get("description") +
+              "</div>" +
+              "</div><div class='row'><div class='col-md-6'></p><p><strong>Fachada: </strong>" +
+              feature.get("orientation") +
+              "</div><div class='col-md-6'></p><p><strong>Área: </strong>" +
+              feature.get("area") +
+              " m<sup> 2</sup>" +
+              "</div></div><div class='row'><div class='col-md-6'></p><p><strong>Climatização: </strong>" +
+              clima +
+              "</div></div></div><hr>" +
+              "<div class='row'><div class='col-md-6'></p><p><strong>Paredes: </strong>" +
+              feature.get("walls") +
+              "</div><div class='col-md-6'></p><p><strong>Pilares: </strong>" +
+              feature.get("pillars") +
+              "</div></div><div class='row'><div class='col-md-6'></p><p><strong>Vigas: </strong>" +
+              feature.get("beams") +
+              "</div><div class='col-md-6'></p><p><strong>Teto: </strong>" +
+              feature.get("ceiling") +
+              "</div></div>"
+          );
+          $(".menuTitulo").html(
+            "Compartimento " + feature.get("name") + "<br>"
+          );
           $("#valueOfh6").html(content1);
         }
         selectCluster.getFeatures().on(["remove"], function(e) {
-          
           if ($("#menu").is(":visible")) {
-           //menu.toggle();
+            //menu.toggle();
           }
         });
       } else {
@@ -717,7 +758,7 @@ radonRiskLayer.setVisible(true);
   });
 
   var highlightedFeatures = [];
-  
+
   map.on("pointermove", function(e) {
     var i;
     for (i = 0; i < highlightedFeatures.length; i++) {}
@@ -726,11 +767,14 @@ radonRiskLayer.setVisible(true);
       highlightedFeatures.push(feature);
       var content = feature.getProperties().name || null;
       var content1 = feature.getProperties().selectclusterfeature || null;
-      if(content != null){
-     // popup.show(feature.getGeometry().getFirstCoordinate(), content);
-      }
-      else if(content1 != null || feature.getProperties().id_ == undefined){
-      popup.show(feature.getGeometry().getFirstCoordinate(), "Sensor " + feature.getProperties().features[0].getProperties().description);
+      if (content != null) {
+        // popup.show(feature.getGeometry().getFirstCoordinate(), content);
+      } else if (content1 != null || feature.getProperties().id_ == undefined) {
+        popup.show(
+          feature.getGeometry().getFirstCoordinate(),
+          "Sensor " +
+            feature.getProperties().features[0].getProperties().description
+        );
       }
     });
   });
@@ -739,13 +783,12 @@ radonRiskLayer.setVisible(true);
   $(map.getViewport()).on("mousemove", function(e) {
     var pixel = map.getEventPixel(e.originalEvent);
     var hit = map.forEachFeatureAtPixel(pixel, function() {
-     
       return true;
     });
     if (hit) {
       mouse.css("cursor", "pointer");
-    } else{
-      mouse.css("cursor","");
+    } else {
+      mouse.css("cursor", "");
       popup.hide();
     }
   });
@@ -905,14 +948,7 @@ radonRiskLayer.setVisible(true);
     select.getFeatures().push(e.search);
     var p = e.search.getGeometry().getFirstCoordinate();
     map.getView().animate({ center: p });
-  });
-
-  /*
-  $("#printTopdf").click(function() {
-    clearCustomInteractions();
-    var width = Math.round((297 * 150) / 25.4);
-    var height = Math.round((210 * 150) / 25.4);
-    var size = /** @type {module:ol/size~Size} */ /*(map.getSize());
+  }); /*(map.getSize());
     var extent = map.getView().calculateExtent(size);
     var today = new Date();
     var dd = today.getDate();
@@ -940,10 +976,17 @@ radonRiskLayer.setVisible(true);
     map.getView().fit(extent, { size: printSize });
   });*/
 
-  var geolocation = new ol.Geolocation({
-    projection: view.getProjection(),
-    tracking: true
-  });
+  /*
+  $("#printTopdf").click(function() {
+    clearCustomInteractions();
+    var width = Math.round((297 * 150) / 25.4);
+    var height = Math.round((210 * 150) / 25.4);
+    var size = /** @type {module:ol/size~Size} */ var geolocation = new ol.Geolocation(
+    {
+      projection: view.getProjection(),
+      tracking: true
+    }
+  );
   $("#geolocalizar").click(function() {
     clearCustomInteractions();
     var position = geolocation.getPosition();
@@ -973,7 +1016,6 @@ radonRiskLayer.setVisible(true);
           clearCustomInteractions();
           map.addInteraction(selectCluster);
           map.updateSize();
- 
         });
     });
     event.preventDefault();
@@ -1185,7 +1227,9 @@ radonRiskLayer.setVisible(true);
           if (!res.errors) {
             $("#polygonSelect")
               .empty()
-              .append('<option selected disabled value="">Selecionar Superior</option>');
+              .append(
+                '<option selected disabled value="">Selecionar Superior</option>'
+              );
             $.each(res, function(i, po) {
               $("#polygonSelect").append(
                 "<option value=" + po._id + ">" + po.name + "</option>"
@@ -1202,97 +1246,105 @@ radonRiskLayer.setVisible(true);
     return false;
   }
 
-  function getSensorInRoom(room){
-      var dataString = {'building': room};
-      var data = JSON.stringify(dataString);
-      $.ajax({
-          type: "POST",
-          url: "http://62.48.168.89/php/getPoligonos.php/mset",
-          async : false,
-          data: {data},
-          success: function(measurements) {
-              if (measurements.length < 1) {
-                $("#dadosEdificio").html("<h6>Sem dados disponíveis</h6>");
-              }
-              else{
-                var newVariable = [];
-                for(var i = 0; i < measurements.length; i++){
-                  newVariable.push("var-Sensor="+measurements[i].sensor_id);
-                }
-                $("#dadosEdificio").html("<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=8&"+newVariable.join("&")+"&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>"+
-                "<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=9&"+newVariable.join("&")+"&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>"+
-                "<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=10&"+newVariable.join("&")+"&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>"+
-                '<iframe src="http://62.48.168.89:4000/d-solo/QHRvd1GWk/rnmonitor_dash_metrix?refresh=5m&orgId=1&'+newVariable.join("&")+'&panelId=4&theme=dark" width="100%" height="100" frameborder="0"></iframe>');
-                  }                  
-          },
-          error: function() {},
-          complete: function() {}
-      });
+  function getSensorInRoom(room) {
+    var dataString = { building: room };
+    var data = JSON.stringify(dataString);
+    $.ajax({
+      type: "POST",
+      url: "http://62.48.168.89/php/getPoligonos.php/mset",
+      async: false,
+      data: { data },
+      success: function(measurements) {
+        if (measurements.length < 1) {
+          $("#dadosEdificio").html("<h6>Sem dados disponíveis</h6>");
+        } else {
+          var newVariable = [];
+          for (var i = 0; i < measurements.length; i++) {
+            newVariable.push("var-Sensor=" + measurements[i].sensor_id);
+          }
+          $("#dadosEdificio").html(
+            "<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=8&" +
+              newVariable.join("&") +
+              "&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>" +
+              "<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=9&" +
+              newVariable.join("&") +
+              "&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>" +
+              "<iframe src='http://62.48.168.89:4000/d-solo/t704n1GWz/rnmonitor_dash_polygon?panelId=10&" +
+              newVariable.join("&") +
+              "&orgId=1&theme=light&refresh=30m' width='100%' height='200' frameborder='0'></iframe>" +
+              '<iframe src="http://62.48.168.89:4000/d-solo/QHRvd1GWk/rnmonitor_dash_metrix?refresh=5m&orgId=1&' +
+              newVariable.join("&") +
+              '&panelId=4&theme=dark" width="100%" height="100" frameborder="0"></iframe>'
+          );
+        }
+      },
+      error: function() {},
+      complete: function() {}
+    });
   }
 
-  function getSensorInBuilding(building){
-     var dataString = {'polygon':building};
-     var data = JSON.stringify(dataString);
-     var newArray = [];
-     $.ajax({
-        type : "POST",
-        url : "http://62.48.168.89/php/getPoligonos.php/inside",
-        data : {data},
-        success : function(data){
-          if(data.length < 1){
-            $("#dadosEdificio").html("<h6>Sem dados disponíveis</h6>");          
-        }else{
+  function getSensorInBuilding(building) {
+    var dataString = { polygon: building };
+    var data = JSON.stringify(dataString);
+    var newArray = [];
+    $.ajax({
+      type: "POST",
+      url: "http://62.48.168.89/php/getPoligonos.php/inside",
+      data: { data },
+      success: function(data) {
+        if (data.length < 1) {
+          $("#dadosEdificio").html("<h6>Sem dados disponíveis</h6>");
+        } else {
           $.each(data, function(i, building) {
-            dataString = {'polygon' : building._id};
+            dataString = { polygon: building._id };
             data = JSON.stringify(dataString);
             $.ajax({
-              type : "POST",
-              url : "http://62.48.168.89/php/getPoligonos.php/inside",
-              data : {data},
-              success : function(newData){
-                $.each(newData, function(a, newBuilding){
-                  dataString = {'building' : newBuilding._id};
+              type: "POST",
+              url: "http://62.48.168.89/php/getPoligonos.php/inside",
+              data: { data },
+              success: function(newData) {
+                $.each(newData, function(a, newBuilding) {
+                  dataString = { building: newBuilding._id };
                   data = JSON.stringify(dataString);
                   $.ajax({
                     type: "POST",
                     url: "http://62.48.168.89/php/getPoligonos.php/mset",
-                    async : false,
-                    data: {data},
+                    async: false,
+                    data: { data },
                     success: function(measurements) {
-                        if (measurements.length < 1) {
-
+                      if (measurements.length < 1) {
+                      } else {
+                        for (var a = 0; a < measurements.length; a++) {
+                          newArray.push(measurements[a].sensor_id);
+                          //newArray.push("var-Sensor="+measurements[a].sensor_id);
                         }
-                        else{              
-                          for(var a = 0 ; a < measurements.length ; a++){
-                            
-                            newArray.push(measurements[a].sensor_id);
-                            //newArray.push("var-Sensor="+measurements[a].sensor_id);
-                          }    
-                            }                  
+                      }
                     },
                     error: function() {},
                     complete: function() {}
+                  });
                 });
-                });  
               }
             });
-          });          
+          });
         }
         console.log(newArray);
-       $("#dadosEdificio").html("<h6>UNDER DEVELOPMENT. FIXING THIS A.S.A.P.</h6>");
-        }
-     });
+        $("#dadosEdificio").html(
+          "<h6>UNDER DEVELOPMENT. FIXING THIS A.S.A.P.</h6>"
+        );
+      }
+    });
   }
 
-  function checkUnique(array){
+  function checkUnique(array) {
     var unique = {};
     var distinct = [];
-      for( var i in array ){
-        if(typeof(unique[array[i].sensor]) == "undefined"){
-          distinct.push(array[i].sensor);
-        }
-        unique[array[i].sensor] = 0;
-                          }
+    for (var i in array) {
+      if (typeof unique[array[i].sensor] == "undefined") {
+        distinct.push(array[i].sensor);
+      }
+      unique[array[i].sensor] = 0;
+    }
     return distinct;
   }
 });

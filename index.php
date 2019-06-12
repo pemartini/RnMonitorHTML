@@ -218,20 +218,10 @@ if(!$_SESSION){
 					</div>
 					<ul class="nav nav-primary">
 						<li class="nav-item active">
-							<a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
+							<a data-toggle="collapse" href="index.php" class="collapsed" aria-expanded="false">
 								<i class="fas fa-map-marker-alt"></i>
 								<p>Map</p>
-								<span class="caret"></span>
 							</a>
-							<div class="collapse" id="dashboard">
-								<ul class="nav nav-collapse">
-									<li>
-										<a href="./demo1/index.html">
-											<span class="sub-item">Base Map</span>
-										</a>
-									</li>
-								</ul>
-							</div>
 						</li>
 						<li class="nav-item">
 							<a data-toggle="collapse" href="#base">
@@ -266,7 +256,7 @@ if(!$_SESSION){
 		<!-- End Sidebar -->
 		<div class="main-panel">
 			<div class="content">
-			<div id="menu">
+					<div id="menu">
                                 <input class="thisInput" id="tab1" type="radio" name="tabs" checked>
                                 <label class="thisLabel" for="tab1">Dashboard</label>
 
@@ -348,6 +338,7 @@ if(!$_SESSION){
 		</div>
 	</div>
 	<script src="./assets/js/core/jquery.3.2.1.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="./assets/js/core/popper.min.js"></script>
 	<script src="./assets/js/core/bootstrap.min.js"></script>
 	<script src="./assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
@@ -357,11 +348,16 @@ if(!$_SESSION){
 	<script src="./assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
 	<script src="./assets/js/plugin/sweetalert/sweetalert.min.js"></script>
 	<script src="./assets/js/atlantis.min.js"></script>
+	<script src="./assets/js/maps/maps.js"></script>
 	<script src="./assets/ol/ol.js"></script>
 	<script src="./assets/js/maps/ol-ext.js"></script>
 	<script src="./assets/js/maps/ol-ext.min.js"></script>
 	<script src="./assets/js/ol-popup.js"></script>
-	<script src="./assets/js/maps/maps.js"></script>
 
+<script>
+ function toggleMenu() {            
+                $('#bar').toggle(250,"linear");
+            }
+</script>
 </body>
 </html>
